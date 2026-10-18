@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<robot name="mobile_painting_robot"
+       xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Reuse the mobile base description -->
+  <!-- <xacro:include
+      filename="$(find robot_description)/urdf/mobile_robot.urdf.xacro"/> -->
+
+  <!-- Reuse the UR10 description -->
+  <xacro:include
+      filename="$(find robot_description)/urdf/ur10.urdf.xacro"/>
+
+  <!-- Connect the arm to the mobile base -->
+  <!-- <joint name="base_to_arm_joint" type="fixed">
+    <parent link="mobile_base_link"/>
+    <child link="base_cylinder"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+  </joint> -->
+
+  <!-- <link name="world"/>
+  <joint name="world_joint" type="fixed">
+    <parent link="world"/>
+    <child link="base_cylinder"/>
+    <origin rpy="0.0 0.0 0.0" xyz="-1.2 0.1 0.0"/>
+  </joint> -->
+
+</robot>

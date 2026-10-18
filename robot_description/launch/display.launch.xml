@@ -1,0 +1,61 @@
+<launch>
+    <let name="urdf_path" 
+         value="$(find-pkg-share robot_description)/urdf/ur10.urdf.xacro" />
+    <let name="gazebo_config_path"
+         value="$(find-pkg-share robot_description)/config/gazebo_bridge.yaml"/>
+    <let name="rviz_config_path"
+         value="$(find-pkg-share robot_description)/rviz/config.rviz"/>
+<!-- 
+    <set_env name="GZ_SIM_RESOURCE_PATH"
+        value="$(optenv GZ_SIM_RESOURCE_PATH):$(find-pkg-prefix robot_description)/share:$(find-pkg-prefix my_robot_bringup)/share" /> -->
+
+
+    <!-- publishing the robot urdf -->
+    <node pkg="robot_state_publisher" exec="robot_state_publisher">
+        <param name="robot_description" value="$(command 'xacro $(var urdf_path)')" />
+        <param name="use_sim_time" value="true" />
+    </node>
+    
+
+    <!-- <node pkg="arm_controller_node" exec="arm_controller"/> -->
+
+    <!-- <node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui" /> -->
+
+    <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
+        <arg name="gz_args" value="$(find-pkg-share robot_description)/worlds/test_world_3.sdf -r" />
+    </include>
+
+    <!-- spawn the robot -->
+    <node pkg="ros_gz_sim" exec="create" args="-topic robot_description -name painting_robot" />
+
+    <node pkg="ros_gz_bridge" exec="parameter_bridge">  
+        <param name="config_file" value="$(var gazebo_config_path)" />
+    </node>
+
+    <node pkg="ros_gz_bridge" exec="parameter_bridge"
+        args="/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"/>
+    <node pkg="controller_manager" exec="spawner"
+        args="joint_state_broadcaster --controller-manager /controller_manager"/>
+    <node pkg="controller_manager" exec="spawner"
+        args="joint_trajectory_controller --controller-manager /controller_manager"/>
+    
+    <!-- run the arm controller -->
+    <node pkg="controller_manager"
+      exec="spawner"
+      args="arm_controller --controller-manager /controller_manager"
+      output="screen"/>
+    <!-- run the moveit configuration -->
+    <include file="$(find-pkg-share robot_moveit_config)/launch/move_group.launch.py"/>
+
+
+ 
+    <executable
+        cmd="ros2 action send_goal /arm_controller/follow_joint_trajectory control_msgs/action/FollowJointTrajectory '{trajectory: {joint_names: [shoulder_pan_joint, shoulder_lift_joint, elbow_joint, wrist_1_joint, wrist_2_joint, wrist_3_joint], points: [{positions: [0.0, -1.57, 1.57, -3.14, 3.14, 0.0], time_from_start: {sec: 3}}]}}'"
+        output="screen"
+    />
+
+
+    <node pkg="rviz2" exec="rviz2" output="screen" 
+          args="-d $(var rviz_config_path)" 
+    />
+</launch>

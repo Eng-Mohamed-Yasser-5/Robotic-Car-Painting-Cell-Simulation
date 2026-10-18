@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<robot name="my_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="scale" default="5.0"/>
+  <xacro:property name="s" value="$(arg scale)"/>
+
+  <material name="black">
+    <color rgba="0.3 0.3 0.3 1.0"/>
+  </material>
+
+  <link name="base_footprint"/>
+
+  <!-- ================= mobile base ================= -->
+  <link name="mobile_base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/mobile/base_link.STL" scale="${s} ${s} ${s}"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/mobile/base_link.STL" scale="${s} ${s} ${s}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 ${0.04*s}" rpy="0.0 0.25 0.3"/>
+      <mass value="${s**3 * 8.2573504e-01}"/>
+      <inertia ixx="${s**5 * 2.2124416e-02}" ixy="${s**5 * -1.2294101e-04}" ixz="${s**5 * 3.4938785e-04}"
+               iyy="${s**5 * 2.1193702e-02}" iyz="${s**5 * -5.0120904e-05}"
+               izz="${s**5 * 2.0064271e-02}"/>
+    </inertial>
+  </link>
+
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="mobile_base_link"/>
+    <origin xyz="0 0 ${0.033*s}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ================= wheels ================= -->
+  <link name="wheel_right_link">
+    <inertial>
+      <origin xyz="0 ${-0.014*s} 0" rpy="0 0 0"/>
+      <mass value="${s**3 * 0.0530086090966721}"/>
+      <inertia ixx="${s**5 * 1.88176298336665E-05}" ixy="${s**5 * -4.8444933029987E-10}" ixz="${s**5 * 1.88163708851143E-08}"
+               iyy="${s**5 * 3.11510738647764E-05}" iyz="${s**5 * -6.93560663069607E-11}"
+               izz="${s**5 * 1.8801969558182E-05}"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/mobile/wheel_right_link.STL" scale="${s} ${s} ${s}"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 ${-0.015*s} 0" rpy="1.57 0 0"/>
+      <geometry>
+        <sphere radius="${0.033*s}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="wheel_left_link">
+    <inertial>
+      <origin xyz="0 ${0.014*s} 0" rpy="0 0 0"/>
+      <mass value="${s**3 * 0.0530086043217644}"/>
+      <inertia ixx="${s**5 * 1.8792911368909E-05}" ixy="${s**5 * 3.31256392204584E-10}" ixz="${s**5 * -1.14082001662767E-08}"
+               iyy="${s**5 * 3.11510738759073E-05}" iyz="${s**5 * -3.60499245082192E-10}"
+               izz="${s**5 * 1.88266886146847E-05}"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="-1.57 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/mobile/wheel_left_link.STL" scale="${s} ${s} ${s}"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 ${0.015*s} 0" rpy="-1.57 0 0"/>
+      <geometry>
+        <sphere radius="${0.033*s}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="wheel_right_joint" type="continuous">
+    <parent link="mobile_base_link"/>
+    <child link="wheel_right_link"/>
+    <origin xyz="0 ${-0.07*s} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="wheel_left_joint" type="continuous">
+    <parent link="mobile_base_link"/>
+    <child link="wheel_left_link"/>
+    <origin xyz="0 ${0.07*s} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- ================= casters ================= -->
+  <link name="caster_front_link">
+    <inertial>
+      <origin xyz="${3.89968128948481E-07*s} ${2.40073004698083E-07*s} ${0.00219173397061506*s}" rpy="0 0 0"/>
+      <mass value="${s**3 * 1.44379265037903E-06}"/>
+      <inertia ixx="${s**5 * 7.23075276010246E-11}" ixy="${s**5 * -6.10956883467859E-16}" ixz="${s**5 * 2.22849693525031E-15}"
+               iyy="${s**5 * 3.8713793085917E-11}" iyz="${s**5 * 2.93909858781952E-15}"
+               izz="${s**5 * 1.00967486676306E-10}"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/mobile/caster_front_link.STL" scale="${s} ${s} ${s}"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="${0.005*s}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="caster_front_joint" type="fixed">
+    <origin xyz="${0.04755*s} 0 ${-0.0275*s}" rpy="0 0 0"/>
+    <parent link="mobile_base_link"/>
+    <child link="caster_front_link"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+
+  <link name="caster_rear_link">
+    <inertial>
+      <origin xyz="${3.8996812895542E-07*s} ${2.40073004698083E-07*s} ${0.00219173397061509*s}" rpy="0 0 0"/>
+      <mass value="${s**3 * 1.44379265037902E-06}"/>
+      <inertia ixx="${s**5 * 7.23075276010246E-11}" ixy="${s**5 * -6.10956872363424E-16}" ixz="${s**5 * 2.22849693527207E-15}"
+               iyy="${s**5 * 3.87137930859167E-11}" iyz="${s**5 * 2.939098587861E-15}"
+               izz="${s**5 * 1.00967486676306E-10}"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/mobile/caster_rear_link.STL" scale="${s} ${s} ${s}"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="${0.005*s}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="caster_rear_joint" type="fixed">
+    <origin xyz="${-0.04755*s} 0 ${-0.0275*s}" rpy="0 0 0"/>
+    <parent link="mobile_base_link"/>
+    <child link="caster_rear_link"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+
+</robot>

@@ -1,0 +1,9 @@
+gedit ~/.bashrc
+
+export GZ_SIM_RESOURCE_PATH=$GZ_SIM_RESOURCE_PATH:$(ros2 pkg prefix robot_description)/share
+
+save
+
+source ~/.bashrc
+
+ros2 launch robot_description display.launch.xml
