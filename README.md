@@ -109,8 +109,6 @@ ros2 run robot_motion_cpp <painting_node_executable>
 
 ## Demo
 
-_Add a screenshot or GIF of the simulation here._
-
 ![Domo](media/vedios/demo.gif)
 
 ## Author
