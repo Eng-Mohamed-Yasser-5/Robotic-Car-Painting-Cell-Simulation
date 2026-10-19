@@ -8,6 +8,10 @@ Robotics Simulation Intern Practical Assessment for YUKTII AI LABS
  - Software : Ros2 jazzy, Gazebo harmonic
  - Robot : UR10
 
+## Demo
+
+![Domo](media/vedios/demo.gif)
+
 ## Overview
 
 Automotive paint shops rely on robot arms to cover car bodies with a uniform coat of paint. This project reproduces a simplified version of that cell in simulation so that painting strategies can be developed and tested safely before touching real hardware.
@@ -106,10 +110,6 @@ ros2 run robot_motion_cpp <painting_node_executable>
 - Painting a small rectangular patch on the car surface works with full Cartesian-path coverage.
 - Planning over larger surfaces can fail with `INVALID_MOTION_PLAN`, usually because of reachability limits or collisions between the arm and the car.
 
-
-## Demo
-
-![Domo](media/vedios/demo.gif)
 
 ## Author
 
